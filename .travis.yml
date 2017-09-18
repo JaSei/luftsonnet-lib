@@ -1,0 +1,9 @@
+sudo: required
+services:
+  - docker
+
+script:
+  - make ci VERSION="$TRAVIS_TAG"
+
+after_success:
+  - test -n "$TRAVIS_TAG" && make push VERSION="$TRAVIS_TAG"
