@@ -1,5 +1,5 @@
 ALL_JSONNET := $(shell find . -name "*.jsonnet")
-IMAGE_NAME := avastsoftware/luftsonnet
+IMAGE_NAME := docker.io/avastsoftware/luftsonnet
 COMMIT := $(shell git rev-parse HEAD)
 ACTUAL_IMAGE := $(IMAGE_NAME):$(COMMIT)
 
@@ -16,6 +16,6 @@ clean:
 	find . -name "*.jsonnet.json" -delete
 
 push:
-	docker login -u $$DOCKER_USERNAME -p $$DOCKER_PASSWORD
+	docker login -u $$DOCKER_USERNAME -p $$DOCKER_PASSWORD docker.io
 	docker tag $(ACTUAL_IMAGE) $(IMAGE_NAME):$$TRAVIS_TAG
 	docker push $(IMAGE_NAME):$$TRAVIS_TAG
