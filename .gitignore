@@ -1,0 +1,3 @@
+.carmel/
+cpanfile.snapshot
+tests/*/*.jsonnet.json
