@@ -1,15 +1,16 @@
 ALL_JSONNET := $(shell find . -name "*.jsonnet")
 IMAGE_NAME := avastsoftware/luftsonnet
-ACTUAL_IMAGE := $(IMAGE_NAME):$$TRAVIS_COMMIT
+COMMIT := $(shell git rev-parse HEAD)
+ACTUAL_IMAGE := $(IMAGE_NAME):$(COMMIT)
 
 build:
 	docker build -t $(ACTUAL_IMAGE) .
 
-ci: build test clean
+ci: test clean
 
-test:
+test: build
 	$(foreach var, $(ALL_JSONNET),docker run -it --rm -v $$PWD:/wd -w /wd $(ACTUAL_IMAGE) $(var) >| $(var).json)
-	docker run --rm -v $PWD/tests:/wd -w /wd avastsoftware/perl-extended bash -c "cpanm --installdeps .; perl test.pl ."
+	docker run --rm -v $$PWD/tests:/wd -w /wd avastsoftware/perl-extended bash -c "cpanm --installdeps .; perl test.pl ."
 
 clean:
 	find . -name "*.jsonnet.json" -delete
