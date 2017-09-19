@@ -9,6 +9,7 @@ ci: build test clean
 
 test:
 	$(foreach var, $(ALL_JSONNET),docker run -it --rm -v $$PWD:/wd -w /wd $(ACTUAL_IMAGE) $(var) >| $(var).json)
+	docker run --rm -v $PWD/tests:/wd -w /wd avastsoftware/perl-extended bash -c "cpanm --installdeps .; perl test.pl ."
 
 clean:
 	find . -name "*.jsonnet.json" -delete
